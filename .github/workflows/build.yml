@@ -9,66 +9,41 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js (Required for Cordova 15)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.17.0'
-
-      - name: Setup Java JDK
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Android SDK 36 tools
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Licenses and Install Packages
         run: |
           yes | sdkmanager --licenses || true
-          sdkmanager --update
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
 
-      - name: Create Clean Cordova Structure
+      - name: Install Cordova and Build
         run: |
-          # إنشاء تطبيق كوردوفا في مجلد مؤقت
+          npm install -g cordova
           npx cordova create cordova_app com.chatslayer.app ChatSlayer
-          
-          # نقل ملف الإعدادات الرئيسي لضمان عدم سحب الإضافة القديمة تلقائياً
           cp config.xml cordova_app/config.xml || true
-
-      - name: Add Android Platform (Without Plugins)
-        run: |
-          cd cordova_app
-          # إجبار كوردوفا على تثبيت المنصة أولاً دون استدعاء الإضافات المكسورة
-          npx cordova platform add android@15.0.0 --no-telemetry
-
-      - name: Add Fixed GooglePlus Plugin
-        run: |
-          cd cordova_app
-          # تثبيت النسخة الحديثة والمصلحة من الإضافة يدويًا بعد استقرار المنصة
-          npx cordova plugin add @salesflare/cordova-plugin-googleplus --save
-
-      - name: Copy Web Assets (www)
-        run: |
-          # تفريغ مجلد www الافتراضي لكوردوفا
-          rm -rf cordova_app/www/*
-          # نسخ ملفات موقعك الحقيقية من مجلد www الأصلي بمشروعك
-          cp -r www/* cordova_app/www/
-          # نقل مجلد الميديا إن وجد
-          cp -r media cordova_app/www/ || true
-          cp -r media cordova_app/ || true
-
-      - name: Build Android APK
-        run: |
-          cd cordova_app
-          # تهيئة ملفات الجرادل يدوياً لتفادي التعليق
-          mkdir -p platforms/android/gradle/wrapper
-          echo "distributionBase=GRADLE_USER_HOME" > platforms/android/gradle/wrapper/gradle-wrapper.properties
-          echo "distributionPath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
-          echo "zipStoreBase=GRADLE_USER_HOME" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
-          echo "zipStorePath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
-          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
           
-          npx cordova build android
-
+          cd cordova_app
+          # نستخدم الإصدار 13 كما اقترح لضمان توافق أفضل مع الإضافات
+          npx cordova platform add android@13.0.0 --no-telemetry
+          
+          # تثبيت الإضافة المصلحة
+          npx cordova plugin add @salesflare/cordova-plugin-googleplus --save
+          
+          # نقل ملفات الموقع
+          rm -rf www/*
+          cp -r ../www/* www/
+          cp -r ../media www/ || true
+          
+          # بناء التطبيق
+          cordova build android
+          
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
