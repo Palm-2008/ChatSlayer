@@ -20,14 +20,16 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
-      - name: Install Cordova
+      - name: Install Cordova Globally
         run: npm install -g cordova
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
 
+      - name: Install Dependencies Safely
+        run: npm install --ignore-scripts --legacy-peer-deps
 
-      - name: Add Android Platform
-        run: cordova platform add android
+      - name: Create Android Platform
+        run: |
+          cordova platform add android || true
+          cordova prepare android
 
       - name: Build APK
         run: cordova build android
