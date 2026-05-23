@@ -23,20 +23,27 @@ jobs:
       - name: Install Cordova Globally
         run: npm install -g cordova
 
-      - name: Install Dependencies Safely
-        run: npm install --ignore-scripts --legacy-peer-deps
-
-      - name: Create Android Platform
+      - name: Create Clean Cordova Structure
         run: |
-          cordova platform add android || true
-          cordova prepare android
+          cordova create cordova_app com.chatslayer.app ChatSlayer
+          rm -rf cordova_app/www/*
+          cp index.html cordova_app/www/
+          cp style.css cordova_app/www/
+          cp java.js cordova_app/www/
+          cp -r media cordova_app/www/ || true
+          cp manifest.json cordova_app/www/ || true
+          cp service-worker.js cordova_app/www/ || true
+          cp config.xml cordova_app/config.xml || true
 
-      - name: Build APK
-        run: cordova build android
+      - name: Build Android APK
+        run: |
+          cd cordova_app
+          cordova platform add android
+          cordova build android
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: ChatSlayer-APK
-          path: platforms/android/app/build/outputs/apk/debug/*.apk
+          path: cordova_app/platforms/android/app/build/outputs/apk/debug/*.apk
 
