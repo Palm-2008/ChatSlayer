@@ -22,9 +22,9 @@ jobs:
 
       - name: Install Cordova
         run: npm install -g cordova
-
       - name: Install Dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
 
       - name: Add Android Platform
         run: cordova platform add android
