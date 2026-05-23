@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.chatslayer.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    
+    <name>Chat Slayer</name>
+    <description>A powerful and dynamic social media application platform.</description>
+    <author email="support@chatslayer.com" href="https://chatslayer.com">Chat Slayer Team</author>
+    
+    <!-- إضافة تسجيل الدخول عبر جوجل -->
+    <plugin name="cordova-plugin-googleplus">
+        <variable name="REVERSED_CLIENT_ID" value="4379327452-lidtepv1ns6bujtlpva2bkfmc2h6qmdf.apps.googleusercontent.com" />
+    </plugin>
+
+    <plugin name="cordova-plugin-whitelist" />
+
+    <content src="index.html" />
+    
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="DisallowOverscroll" value="true" />
+    
+    <platform name="android">
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="GradleVersion" value="8.0" />
+        
+        <!-- الأيقونات النهائية من الشعار -->
+        <icon src="media/icon-96.png" density="ldpi" />
+        <icon src="media/icon-128.png" density="mdpi" />
+        <icon src="media/icon-144.png" density="hdpi" />
+        <icon src="media/icon-192.png" density="xhdpi" />
+        <icon src="media/icon-512.png" density="xxxhdpi" />
+    </platform>
+    
+    <access origin="https://*.firebaseio.com" />
+    <access origin="https://*.googleapis.com" />
+    <access origin="https://*.gstatic.com" />
+    <access origin="https://*.firebaseapp.com" />
+    <access origin="https://accounts.google.com" />
+    <access origin="https://cdnjs.cloudflare.com" />
+    <access origin="https://cdn.jsdelivr.net" />
+    <access origin="https://api.cloudinary.com" />
+    <access origin="https://ui-avatars.com" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+</widget>

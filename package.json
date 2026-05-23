@@ -1,0 +1,24 @@
+{
+  "name": "chat-slayer",
+  "version": "3.5.0",
+  "private": true,
+  "description": "Chat Slayer Cordova/Firebase app",
+  "scripts": {
+    "prepare": "cordova prepare",
+    "build:android": "cordova build android",
+    "run:android": "cordova run android",
+    "serve": "cordova serve"
+  },
+  "devDependencies": {
+    "cordova": "^12.0.0"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-googleplus": {}
+    }
+  }
+}
