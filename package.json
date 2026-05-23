@@ -1,0 +1,30 @@
+{
+  "name": "com.chatslayer.app",
+  "displayName": "ChatSlayer",
+  "version": "1.0.0",
+  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ecosystem:cordova"
+  ],
+  "author": "Apache Cordova Team",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "cordova-android": "^15.0.0",
+    "cordova-plugin-googleplus": "^8.5.2"
+  },
+  "cordova": {
+    "platforms": [
+      "android"
+    ],
+    "plugins": {
+      "cordova-plugin-googleplus": {
+        "REVERSED_CLIENT_ID": "YOUR_REVERSED_CLIENT_ID",
+        "PLAY_SERVICES_VERSION": "15.0.1"
+      }
+    }
+  }
+}

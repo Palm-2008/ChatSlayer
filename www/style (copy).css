@@ -1,0 +1,229 @@
+:root {
+  --bg-dark: #000000;
+  --bg-card: #16181c;
+  --primary: #1d9bf0;
+  --cyan: #00ffff;
+  --text-main: #ffffff;
+  --text-sub: #71767b;
+  --danger: #f4212e;
+  --border: #2f3336;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; -webkit-tap-highlight-color: transparent; }
+body { background-color: var(--bg-dark); color: var(--text-main); height: 100dvh; min-height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* شاشةtt التح٠٠ميل00 */
+#loadingOverlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 9999;
+    justify-content: center; align-items: center; flex-direction: column;
+}
+.spinner { width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* الهيكل العام */
+.screen {
+    display: none; flex-direction: column;
+    position: fixed; inset: 0;
+    background: #000; z-index: 10;
+    /* منع الانزياح  عند فتح لوحة المفاتيح على الموبايل */
+    height: 100dvh;
+    overflow: hidden;
+}
+.app-header {
+  padding: 0 12px; height: 55px; background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+  display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 20; gap: 8px;
+  flex-shrink: 0;
+}
+.header-title { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.header-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; display: inline-block; }
+.header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); cursor: pointer; flex-shrink: 0; }
+.icon-btn { background: none; color: #fff; border: none; font-size: 1.2rem; padding: 8px; cursor: pointer; }
+.badge { position: absolute; top: 3px; right: 3px; background: red; color: #fff; font-size: 10px; padding: 2px 5px; border-radius: 10px; display: none; }
+
+/* الهيدر - أيقونات على اليمين (في RTL تظهر يميناً كأول عنصر) */
+.header-icons { display: flex; align-items: center; gap: 2px; }
+.notification-wrapper { display: inline-flex; align-items: center; position: relative; }
+
+/* الفلاتر */
+.filters-bar { padding: 8px 12px; border-bottom: 1px solid #333; display: flex; gap: 8px; }
+.filter-chip { color: #777; cursor: pointer; padding: 5px 12px; border-radius: 20px; transition: 0.2s; font-size: 0.9rem; white-space: nowrap; }
+.filter-chip.active { color: #000; background: #fff; font-weight: bold; }
+
+/* المنشورات */
+.content-area { flex: 1; overflow-y: auto; padding-bottom: 20px; scroll-behavior: smooth; overscroll-behavior: contain; }
+.post-card { border-bottom: 1px solid var(--border); padding: 12px 14px; display: flex; gap: 10px; position: relative; }
+.avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: #333; cursor: pointer; }
+.post-content { flex: 1; min-width: 0; }
+.user-info { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; color: #fff; flex-wrap: nowrap; gap: 4px; }
+.username { font-weight: 700; color: #fff; cursor: pointer; }
+.post-text { margin-top: 5px; font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; color: #e7e9ea; }
+
+/* أزرار التفاعل */
+.post-actions { display: flex; justify-content: space-between; margin-top: 10px; max-width: 95%; flex-wrap: wrap; gap: 4px; }
+.act-btn { color: var(--text-sub); display: flex; align-items: center; gap: 5px; font-size: 0.85rem; background: none; border: none; cursor: pointer; transition: 0.2s; }
+.act-btn:hover { color: var(--primary); }
+.act-btn.like-btn.active { color: #f91880; }
+.act-btn.dislike-btn.active { color: var(--cyan); }
+.mention-badge { background: rgba(29,155,240,0.15); color: #1d9bf0; border-radius: 4px; padding: 0 4px; font-weight: bold; cursor: pointer; }
+
+/* حقل الإدخال */
+.input-area { padding: 6px 10px; border-top: 1px solid var(--border); background: #000; display: flex; gap: 8px; align-items: center; }
+.input-wrapper {
+    flex: 1;
+    display: flex; flex-direction: row; align-items: center;
+    background: #202327; border-radius: 24px; overflow: hidden;
+    padding: 0 4px 0 12px;
+}
+.chat-input {
+    flex: 1; background: transparent; border: none; padding: 10px 0;
+    color: #fff; resize: none; font-size: 0.9rem;
+    max-height: 80px; min-height: 40px; outline: none;
+    font-family: 'Cairo', sans-serif; line-height: 1.4;
+}
+.tall-input { min-height: 40px; }
+.char-count-inline {
+    flex-shrink: 0;
+    padding: 0 8px 0 4px;
+    font-size: 0.62rem; color: #4a4f56;
+    font-family: 'Cairo', sans-serif;
+    user-select: none;
+    white-space: nowrap;
+}
+.send-btn {
+    width: 46px; height: 46px; border-radius: 50%; background: var(--primary);
+    color: #fff; border: none; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; font-size: 1rem; transition: background 0.2s;
+}
+.send-btn:disabled { background: #333; cursor: not-allowed; }
+.anon-btn {
+    width: 36px; height: 36px; border-radius: 50%; background: transparent;
+    color: #555; border: 1px solid #333; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; font-size: 1rem;
+    transition: color 0.22s ease, background 0.22s ease, border-color 0.22s ease, transform 0.12s ease, box-shadow 0.22s ease;
+}
+.anon-btn:active { transform: scale(0.82); }
+.anon-btn:hover { border-color: #a78bfa; color: #a78bfa; }
+.anon-btn.anon-active {
+    border-color: #a78bfa; color: #fff;
+    background: #a78bfa;
+    box-shadow: 0 0 12px rgba(167,139,250,0.55);
+}
+
+/* فلاتر الردود في الهيدر */
+.thread-header-actions { display: flex; align-items: center; gap: 3px; margin-right: auto; }
+.thread-header-actions .filter-chip { font-size: 0.76rem; padding: 3px 9px; }
+
+/* Pull-to-Refresh */
+.ptr-indicator {
+  text-align: center; padding: 10px; color: var(--primary);
+  font-size: 1.1rem; background: #000;
+}
+.ptr-spin { animation: spin 0.8s linear infinite; display: inline-block; }
+
+/* البروفايل */
+.profile-scroll-area { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+.profile-cover { height: 165px; background-color: #1a1a2e; background-size: cover; background-position: center; cursor: pointer; }
+.profile-details-container { padding: 0 14px 20px; }
+.profile-top-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: -50px; margin-bottom: 10px; }
+.big-avatar { width: 96px; height: 96px; border-radius: 50%; border: 3px solid #000; background: #000; object-fit: cover; cursor: zoom-in; }
+.profile-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.action-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: #000; color: #fff; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; height: 34px; font-size: 0.85rem; font-family: 'Cairo', sans-serif; }
+.action-btn.filled { background: #fff; color: #000; border: none; }
+.action-btn.danger { border-color: var(--danger); color: var(--danger); }
+.back-circle { background: rgba(0,0,0,0.6); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 50; }
+.profile-info-text { margin-top: 6px; }
+.bio-section { margin-top: 8px; }
+.bio-section p { color: #e7e9ea; font-size: 0.95rem; line-height: 1.5; }
+.logo-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+
+/* المودال */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; }
+.modal-content { background: #000; border: 1px solid var(--border); padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
+.modal-input { width: 100%; background: #202327; border: 1px solid var(--border); color: #fff; padding: 10px; margin-bottom: 12px; border-radius: 8px; font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
+label { display: block; color: #aaa; font-size: 0.85rem; margin-bottom: 4px; }
+input[type="file"] { padding: 5px; }
+
+/* شاشة تسجيل الدخول */
+#auth { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: #000; text-align: center; }
+.app-logo { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(29,155,240,0.3); }
+.auth-card { width: 100%; max-width: 400px; }
+.auth-card input { width: 100%; padding: 14px; margin: 8px 0; background: #16181c; border: 1px solid var(--border); color: #fff; border-radius: 8px; outline: none; font-family: 'Cairo', sans-serif; }
+.primary-btn { width: 100%; padding: 14px; background: #fff; color: #000; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; margin-top: 15px; font-family: 'Cairo', sans-serif; }
+.secondary-btn { width: 100%; padding: 14px; background: transparent; color: var(--primary); border: 1px solid var(--border); font-weight: bold; border-radius: 25px; cursor: pointer; margin-top: 10px; font-family: 'Cairo', sans-serif; }
+.google-btn { width: 100%; padding: 14px; background: #fff; color: #333; font-weight: bold; border-radius: 25px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; font-family: 'Cairo', sans-serif; }
+.divider { color: var(--text-sub); margin: 15px 0; font-size: 0.9rem; }
+
+/* أنيميشن الريفرش */
+@keyframes spin-once { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spinning { animation: spin-once 0.8s ease-in-out; }
+
+/* زر التحديث في الهيدر */
+.refresh-header-btn {
+    color: #555;
+    font-size: 0.95rem;
+    padding: 6px 8px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+.refresh-header-btn:hover { color: var(--primary); }
+
+/* الإشعارات */
+.unread-notif { background: #0c0e12 !important; border-right: 3px solid var(--primary); }
+
+/* تمييز المنشور */
+@keyframes highlight-anim { 0%,100% { background: transparent; } 40% { background: rgba(29,155,240,0.2); } }
+.highlight-post { animation: highlight-anim 2s ease; }
+
+@media (min-width: 768px) { body { max-width: 600px; margin: 0 auto; border-left: 1px solid var(--border); border-right: 1px solid var(--border); } }
+
+/* Twemoji - مثل تويتر */
+img.emoji {
+  height: 1.3em !important;
+  width: 1.3em !important;
+  vertical-align: -0.25em !important;
+  display: inline-block !important;
+  object-fit: contain !important;
+  margin: 0 0.1em !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* منشور مجهول */
+.anon-card { border-right: 2px solid rgba(167,139,250,0.4); }
+
+/* غلاف الشارة (للضغط وإظهار اسمها) */
+.badge-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    line-height: 1;
+    vertical-align: middle;
+}
+.badge-label {
+    font-size: .58rem;
+    white-space: nowrap;
+    margin-top: 1px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/* معاينة الأفتار المصغرة */
+#miniAvatarPopup {
+  animation: mini-popup-in 0.18s ease;
+}
+#miniAvatarOverlay {
+  animation: overlay-in 0.18s ease;
+}
+@keyframes mini-popup-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.88); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

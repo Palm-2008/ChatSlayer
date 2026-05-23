@@ -1,0 +1,14 @@
+{
+    "name": "Chat Slayer",
+    "short_name": "Chat Slayer",
+    "description": "تطبيق التواصل الاجتماعي Chat Slayer",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "orientation": "portrait",
+    "icons": [
+        { "src": "media/logo.jpg", "sizes": "192x192", "type": "image/jpeg" },
+        { "src": "media/logo.jpg", "sizes": "512x512", "type": "image/jpeg" }
+    ]
+}

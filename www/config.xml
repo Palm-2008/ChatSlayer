@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.chatslayer.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    
+    <name>Chat Slayer</name>
+    <description>A powerful and dynamic social media application platform.</description>
+    <author email="support@chatslayer.com" href="https://chatslayer.com">Chat Slayer Team</author>
+    
+    <!-- إضافة تسجيل الدخول عبر جوجل -->
+    <plugin name="cordova-plugin-googleplus">
+        <variable name="REVERSED_CLIENT_ID" value="4379327452-lidtepv1ns6bujtlpva2bkfmc2h6qmdf.apps.googleusercontent.com" />
+    </plugin>
+
+    <content src="index.html" />
+    
+    <preference name="ScrollEnabled" value="false" />
+    <preference name="AndroidPersistentFileLocation" value="Internal" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="DisallowOverscroll" value="true" />
+    
+    <platform name="android">
+        <preference name="AndroidXEnabled" value="true" />
+        <preference name="GradleVersion" value="8.0" />
+        
+        <icon src="res/icon/android/ldpi.png" density="ldpi" />
+        <icon src="res/icon/android/mdpi.png" density="mdpi" />
+        <icon src="res/icon/android/hdpi.png" density="hdpi" />
+        <icon src="res/icon/android/xhdpi.png" density="xhdpi" />
+        <icon src="res/icon/android/xxhdpi.png" density="xxhdpi" />
+        <icon src="res/icon/android/xxxhdpi.png" density="xxxhdpi" />
+        
+        <icon density="mdpi" src="res/icon/android/mdpi.png">
+            <foreground src="res/icon/android/adaptive-foreground.png" />
+            <background src="res/icon/android/adaptive-background.png" />
+        </icon>
+        <icon density="hdpi" src="res/icon/android/hdpi.png">
+            <foreground src="res/icon/android/adaptive-foreground.png" />
+            <background src="res/icon/android/adaptive-background.png" />
+        </icon>
+        <icon density="xhdpi" src="res/icon/android/xhdpi.png">
+            <foreground src="res/icon/android/adaptive-foreground.png" />
+            <background src="res/icon/android/adaptive-background.png" />
+        </icon>
+        <icon density="xxhdpi" src="res/icon/android/xxhdpi.png">
+            <foreground src="res/icon/android/adaptive-foreground.png" />
+            <background src="res/icon/android/adaptive-background.png" />
+        </icon>
+        <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png">
+            <foreground src="res/icon/android/adaptive-foreground.png" />
+            <background src="res/icon/android/adaptive-background.png" />
+        </icon>
+    </platform>
+    
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+</widget>
