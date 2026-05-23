@@ -22,13 +22,16 @@ jobs:
 
       - name: Create Clean Cordova Structure
         run: |
+          # إنشاء تطبيق كوردوفا في مجلد مؤقت
           npx cordova create cordova_app com.chatslayer.app ChatSlayer
+          
+          # تفريغ مجلد www الافتراضي لكوردوفا
           rm -rf cordova_app/www/*
-          cp index.html cordova_app/www/
-          cp style.css cordova_app/www/
-          cp java.js cordova_app/www/
-          cp manifest.json cordova_app/www/ || true
-          cp service-worker.js cordova_app/www/ || true
+          
+          # نسخ ملفات موقعك من مجلد www الأصلي في مستودعك إلى مجلد التطبيق
+          cp -r www/* cordova_app/www/
+          
+          # نقل ملف الإعدادات الرئيسي ومجلد الميديا
           cp config.xml cordova_app/config.xml || true
           cp -r media cordova_app/www/ || true
           cp -r media cordova_app/ || true
@@ -37,12 +40,15 @@ jobs:
         run: |
           cd cordova_app
           npx cordova platform add android
+          
+          # إنشاء ملف الجرادل يدوياً لتفادي التعليق
           mkdir -p platforms/android/gradle/wrapper
           echo "distributionBase=GRADLE_USER_HOME" > platforms/android/gradle/wrapper/gradle-wrapper.properties
           echo "distributionPath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
           echo "zipStoreBase=GRADLE_USER_HOME" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
           echo "zipStorePath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
           echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
+          
           npx cordova build android
 
       - name: Upload APK
