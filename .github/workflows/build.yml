@@ -20,12 +20,9 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Install Cordova Globally
-        run: npm install -g cordova
-
       - name: Create Clean Cordova Structure
         run: |
-          cordova create cordova_app com.chatslayer.app ChatSlayer
+          npx cordova create cordova_app com.chatslayer.app ChatSlayer
           rm -rf cordova_app/www/*
           cp index.html cordova_app/www/
           cp style.css cordova_app/www/
@@ -38,12 +35,11 @@ jobs:
           cp -r media cordova_app/ || true
 
       - name: Build Android APK
-        env:
-          CORDOVA_ANDROID_GRADLE_VERSION: '8.4'
         run: |
           cd cordova_app
-          cordova platform add android
-          cordova build android
+          npx cordova platform add android
+          # البناء مع تمرير إصدار الـ Gradle المطلوب مباشرة كخيار إجباري
+          npx cordova build android -- --gradlev=8.4
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
