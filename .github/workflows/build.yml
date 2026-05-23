@@ -30,10 +30,12 @@ jobs:
           cp index.html cordova_app/www/
           cp style.css cordova_app/www/
           cp java.js cordova_app/www/
-          cp -r media cordova_app/www/ || true
           cp manifest.json cordova_app/www/ || true
           cp service-worker.js cordova_app/www/ || true
           cp config.xml cordova_app/config.xml || true
+                    # نسخ مجلد الميديا والأيقونات إلى كلا المكانين لضمان العثور عليها
+          cp -r media cordova_app/www/ || true
+          cp -r media cordova_app/ || true
 
       - name: Build Android APK
         run: |
