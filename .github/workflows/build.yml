@@ -38,12 +38,12 @@ jobs:
         run: |
           cd cordova_app
           npx cordova platform add android
-          # البناء مع تمرير إصدار الـ Gradle المطلوب مباشرة كخيار إجباري
-          npx cordova build android -- --gradlev=8.4
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: ChatSlayer-APK
-          path: cordova_app/platforms/android/app/build/outputs/apk/debug/*.apk
+          # الحيلة الحاسمة: إنشاء المجلد وكتابة ملف الخصائص يدوياً بالنسخة المطلوبة
+          mkdir -p platforms/android/gradle/wrapper
+          echo "distributionBase=GRADLE_USER_HOME" > platforms/android/gradle/wrapper/gradle-wrapper.properties
+          echo "distributionPath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
+          echo "zipStoreBase=GRADLE_USER_HOME" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
+          echo "zipStorePath=wrapper/dists" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip" >> platforms/android/gradle/wrapper/gradle-wrapper.properties
+          npx cordova build android
 
