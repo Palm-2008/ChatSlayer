@@ -1,52 +1,23 @@
-name: Build Cordova APK
-on:
-  push:
-    branches: [ main, master ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept Licenses and Install Packages
-        run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0" "platform-tools"
-
       - name: Install Cordova and Build
+        env:
+          # تقييد استهلاك الذاكرة للسيرفر لمنع التجمّد
+          _JAVA_OPTIONS: "-Xmx2048m"
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2048m"
         run: |
           npm install -g cordova
           npx cordova create cordova_app com.chatslayer.app ChatSlayer
           cp config.xml cordova_app/config.xml || true
           
           cd cordova_app
-          # نستخدم الإصدار 13 كما اقترح لضمان توافق أفضل مع الإضافات
           npx cordova platform add android@13.0.0 --no-telemetry
           
-          # تثبيت الإضافة المصلحة
+          # تثبيت إضافة GooglePlus
           npx cordova plugin add @salesflare/cordova-plugin-googleplus --save
           
-          # نقل ملفات الموقع
+          # نقل ملفات الموقع لمجلد www
           rm -rf www/*
           cp -r ../www/* www/
-          cp -r ../media www/ || true
           
-          # بناء التطبيق
-          cordova build android
-          
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: ChatSlayer-APK
-          path: cordova_app/platforms/android/app/build/outputs/apk/debug/*.apk
+          # إجبار أداة البناء على عدم التجمد وطباعة كل التفاصيل
+          npx cordova build android -- --gradleArg=--no-daemon --gradleArg=--stacktrace --gradleArg=--info
 
