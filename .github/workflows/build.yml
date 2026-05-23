@@ -33,7 +33,7 @@ jobs:
           cp manifest.json cordova_app/www/ || true
           cp service-worker.js cordova_app/www/ || true
           cp config.xml cordova_app/config.xml || true
-                    # نسخ مجلد الميديا والأيقونات إلى كلا المكانين لضمان العثور عليها
+          # نسخ مجلد الميديا والأيقونات
           cp -r media cordova_app/www/ || true
           cp -r media cordova_app/ || true
 
@@ -41,6 +41,10 @@ jobs:
         run: |
           cd cordova_app
           cordova platform add android
+          # إجبار التحديث لإصدار Gradle المطلوب لتفادي التعارض
+          cd platforms/android
+          ./gradlew wrapper --gradle-version 8.4
+          cd ../..
           cordova build android
 
       - name: Upload APK
