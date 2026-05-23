@@ -41,10 +41,8 @@ jobs:
         run: |
           cd cordova_app
           cordova platform add android
-          # إجبار التحديث لإصدار Gradle المطلوب لتفادي التعارض
-          cd platforms/android
-          ./gradlew wrapper --gradle-version 8.4
-          cd ../..
+          # تعديل رقم إصدار Gradle مباشرة داخل ملف الخصائص لتجنب أي خطأ مسار
+          sed -i 's/gradle-8.0-bin.zip/gradle-8.4-bin.zip/g' platforms/android/gradle/wrapper/gradle-wrapper.properties
           cordova build android
 
       - name: Upload APK
